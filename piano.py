@@ -55,37 +55,46 @@ def frequence_note(nb_demis_tons):
     """fréquence en hertz en fonction de la distance en demis-tons du la440"""
     return la440*2**(nb_demis_tons/12)
 
-data=[sine_wave(i/sample_rate,frequence_note(0)) for i in range (sample_rate)]\
-    +[sine_wave(i/sample_rate,frequence_note(2)) for i in range (sample_rate)]\
-    +[sine_wave(i/sample_rate,frequence_note(4)) for i in range (sample_rate)]\
-    +[sine_wave(i/sample_rate,frequence_note(0)) for i in range (sample_rate-5000)]\
-    +[0 for i in range (5000)]\
-    +[sine_wave(i/sample_rate,frequence_note(0)) for i in range (sample_rate)]\
-    +[sine_wave(i/sample_rate,frequence_note(2)) for i in range (sample_rate)]\
-    +[sine_wave(i/sample_rate,frequence_note(4)) for i in range (sample_rate)]\
-    +[sine_wave(i/sample_rate,frequence_note(0)) for i in range (sample_rate)]
-wav.write('frère_jacques.wav',sample_rate,np.array(data))
+frere_jacques = [(0,1),(2,1),(4,1),(0,0.9),(None,0.1),(0,1),(2,1),(4,1),(0,0.9),
+                 (None,0.1),(4,1),(5,1),(7,1.9),(None,0.1),(4,1),(5,1),(7,1.9),(None,0.1),
+                 (7,0.75),(9,0.25),(7,0.5),(5,0.5),(4,1),(0,0.9),(None,0.1),
+                 (7,0.75),(9,0.25),(7,0.5),(5,0.5),(4,1),(0,0.9),(None,0.1),
+                 (0,1),(-5,1),(0,1),(None,1),(0,1),(-5,1),(0,1),(None,9)]
+
+frere_jacques2 = [(None,8),(0,1),(2,1),(4,1),(0,0.9),(None,0.1),(0,1),(2,1),(4,1),(0,0.9),
+                 (None,0.1),(4,1),(5,1),(7,1.9),(None,0.1),(4,1),(5,1),(7,1.9),(None,0.1),
+                 (7,0.75),(9,0.25),(7,0.5),(5,0.5),(4,1),(0,0.9),(None,0.1),
+                 (7,0.75),(9,0.25),(7,0.5),(5,0.5),(4,1),(0,0.9),(None,0.1),
+                 (0,1),(-5,1),(0,1),(None,1),(0,1),(-5,1),(0,1.5)]
+
 
 def jouer_note(nb_demis_tons,duree,forme_d_onde):
-    """crée une onde échantillonnée 
+    """INT crée une onde échantillonnée 
     nb_demis_tons : écarts au la 440 en demis-tons
-    duree : en secondes"""
-    return [forme_d_onde(i/sample_rate,frequence_note(nb_demis_tons))
+    duree : en noires"""
+    if nb_demis_tons == None : #gestion des silences
+        return [0 for i in range (int(sample_rate*duree))]
+    else: 
+        return [forme_d_onde(i/sample_rate,frequence_note(nb_demis_tons))
             for i in range (int(sample_rate*duree))]
 
-def partition(notes,forme_d_onde):
+def partition(notes,forme_d_onde,tempo):
     """échantillonne une suite de notes
     notes : liste de tuples (couples) demis-tons du la, duree 
-    forme d'onde : fonction d'onde choisie"""
+    forme d'onde : fonction d'onde choisie
+    tempo: duree de la noire"""
     data=[]
     for nb_demis_tons,duree in notes : 
-        data+=jouer_note(nb_demis_tons,duree,forme_d_onde)
+        data+=jouer_note(nb_demis_tons,duree*(60/tempo),forme_d_onde)
     return data
     
 def export_partition(data,nom) : 
     """exporte une suite de note en fichier wave"""
     return wav.write(nom+'.wav',sample_rate,np.array(data))
 
+
+def mix (data1,data2): 
+    return [(i+j)/2 for i,j in zip(data1,data2)]
 
         
 
