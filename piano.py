@@ -8,6 +8,7 @@ Created on Sat Dec 14 11:59:00 2019
 import numpy as np 
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
+from numpy.random import random 
 
 
 def sine_wave(t,f) : 
@@ -42,7 +43,7 @@ plt.plot(x,y)
 def triangle_wave(t,f):
    """valeur onde en triangle 
    de fréquence f en herts en fonction du temps t en seconde"""
-   return 1
+   return abs(((f*t)%1.0)-1/2)*4-1
 
 x=[i/299 for i in range(300)]
 y=[triangle_wave(i,4) for i in x]
@@ -93,8 +94,21 @@ def export_partition(data,nom) :
     return wav.write(nom+'.wav',sample_rate,np.array(data))
 
 
-def mix (data1,data2): 
-    return [(i+j)/2 for i,j in zip(data1,data2)]
+def mix (*data): 
+    return [(sum(d))/len(data) for d in zip(*data)]
+
+def gain (data,gain):
+    return [i*gain for i in data]
+
+cluster=mix(*[jouer_note(((i*2)-30),3,sine_wave) for i in range(30)])
+
+musique_chiffres= [(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(12,1/3),(14,1/3),(17,1/3),(19,1/3),(21,1/3),(24,1/3),(26,1)]
+basse_chiffres1= [(-5,8),(None,3)]
+basse_chiffres2=[(-5.05,8),(None,3)]
+basse_chiffres3=[(-4.95,8),(None,3)]
+
+
+
 
         
 
