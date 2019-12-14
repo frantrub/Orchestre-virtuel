@@ -100,12 +100,26 @@ def mix (*data):
 def gain (data,gain):
     return [i*gain for i in data]
 
-cluster=mix(*[jouer_note(((i*2)-30),3,sine_wave) for i in range(30)])
+
 
 musique_chiffres= [(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(12,1/3),(14,1/3),(17,1/3),(19,1/3),(21,1/3),(24,1/3),(26,1)]
 basse_chiffres1= [(-5,8),(None,3)]
 basse_chiffres2=[(-5.05,8),(None,3)]
 basse_chiffres3=[(-4.95,8),(None,3)]
+contre_temps_chiffres=[(None,0.5),(19,1),(19,1),(19,1),(19,1),(19,1),(19,1),(19,1),(None,2.5)]
+
+def reduction_rapide (fonction_d_onde,alpha=5):
+    def nouvelle_fonction (t,f):
+        return fonction_d_onde(t,f)*np.exp(-alpha*t)
+    return nouvelle_fonction
+
+glokenspiel = reduction_rapide(triangle_wave)
+
+
+
+
+
+
 
 
 
