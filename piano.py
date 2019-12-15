@@ -138,6 +138,12 @@ tempo=100
 conducteur(infos_partitions, tempo, 'partition complète chiffres')
 
 
+def bruit_blanc(t,f):
+    return random()*2-1
+
+Charleston = reduction_rapide(bruit_blanc,20)
+
+
 
 
 
