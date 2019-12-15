@@ -90,35 +90,52 @@ def partition(notes,forme_d_onde,tempo):
     return data
     
 def export_partition(data,nom) : 
-    """exporte une suite de note en fichier wave"""
+    """Exporte une suite de note en fichier wave
+    Le sample_rate correspond au nombre de points mis dans une même seconde
+    On passe data en array (considéré par la scipy.wave.write)"""
     return wav.write(nom+'.wav',sample_rate,np.array(data))
 
 
 def mix (*data): 
+    """Moyenne de plusieurs partitions, 
+    rend comme la simultanéité du jeu de ces partitions"""
     return [(sum(d))/len(data) for d in zip(*data)]
 
 def gain (data,gain):
+    """Permet de gérer les volumes relatifs des différentes partitions"""
     return [i*gain for i in data]
 
 
 
-musique_chiffres= [(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(12,1/3),(14,1/3),(17,1/3),(19,1/3),(21,1/3),(24,1/3),(26,1)]
-basse_chiffres1= [(-5,8),(None,3)]
-basse_chiffres2=[(-5.05,8),(None,3)]
-basse_chiffres3=[(-4.95,8),(None,3)]
-contre_temps_chiffres=[(None,0.5),(19,1),(19,1),(19,1),(19,1),(19,1),(19,1),(19,1),(None,2.5)]
+musique_chiffres= [(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),(7,1),(14,1),
+                   (12,1/3),(14,1/3),(17,1/3),(19,1/3),(21,1/3),(24,1/3),(26,1)]
+basse_chiffres1= [(-5,12),(None,3)]
+basse_chiffres2=[(-5.05,12),(None,3)]
+basse_chiffres3=[(-4.95,12),(None,3)]
+contre_temps_chiffres=[(None,0.5),(None,1),(None,1),(None,1),(None,1),(None,1),(None,1),(None,1),(19,1),(19,1),(19,1),(19,1),(19,1),(None,2.5)]
 
 def reduction_rapide (fonction_d_onde,alpha=5):
+    """Permet de créer des instruments au timbre percusif"""
     def nouvelle_fonction (t,f):
         return fonction_d_onde(t,f)*np.exp(-alpha*t)
     return nouvelle_fonction
 
-glokenspiel = reduction_rapide(triangle_wave)
+glokenspiel = reduction_rapide(triangle_wave) #Glokenspiel est une fonction qui dépend de t et f
+glokenspiel2=reduction_rapide(triangle_wave,8)
+
+def conducteur (infos_partitions,tempo,nom):
+    x=[]
+    for notes, volume, onde in infos_partitions :
+        x.append(gain(partition(notes,onde,tempo),volume))
+    return export_partition(mix(*x),nom)
+
+infos_partitions=[(musique_chiffres,1,glokenspiel),(basse_chiffres1,1/3,sine_wave),
+                  (basse_chiffres2,1/3,sine_wave),(basse_chiffres3,1/3,sine_wave),
+                  (contre_temps_chiffres,0.5,glokenspiel2)]
+tempo=100
 
 
-
-
-
+conducteur(infos_partitions, tempo, 'partition complète chiffres')
 
 
 
