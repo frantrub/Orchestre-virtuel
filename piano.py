@@ -146,6 +146,11 @@ Charleston = reduction_rapide(bruit_blanc,20)
 
 
 
+ 
+
+
+
+
 
         
 
