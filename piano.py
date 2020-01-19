@@ -3,6 +3,14 @@
 Created on Sat Dec 14 11:59:00 2019
 
 @author: ftrub
+
+Ce programme renvoie un fichier wav de la musique des Chiffres et des Lettres. 
+
+Il effectue pour cela trois choses : 
+    -Il crée des instruments
+    -Il crée une partition
+    -Il transforme les fonctions générées en fichier son
+
 """
 
 import numpy as np 
