@@ -82,7 +82,7 @@ frere_jacques2 = [(None,8),(0,1),(2,1),(4,1),(0,0.9),(None,0.1),(0,1),(2,1),(4,1
                  (7,0.75),(9,0.25),(7,0.5),(5,0.5),(4,1),(0,0.9),(None,0.1),
                  (0,1),(-5,1),(0,1),(None,1),(0,1),(-5,1),(0,1.5)]
 
-#Différentes focntions permettant de créer une partition et de l'exporter en wav.
+#Différentes fonctions permettant de créer une partition et de l'exporter en wav.
 
 def jouer_note(nb_demis_tons,duree,forme_d_onde):
     """INT crée une onde échantillonnée 
